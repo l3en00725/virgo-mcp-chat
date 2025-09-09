@@ -8,7 +8,17 @@ import DatadogInit from '@/components/datadog-init';
 
 import './globals.css';
 
-export const metadata: Metadata = BASE_METADATA;
+export const metadata: Metadata = {
+  ...BASE_METADATA,
+  title: "Virgo Chat",
+  description: "Chat directly with 2,800+ APIs in one place, powered by Virgo.",
+  icons: {
+    icon: "/images/profileimg.jpg",
+    shortcut: "/images/profileimg.jpg",
+    apple: "/images/profileimg.jpg",
+  },
+};
+
 
 export const viewport = {
   maximumScale: 1, // Disable auto-zoom on mobile Safari
