@@ -8,7 +8,7 @@ export function SignedOutHeader() {
     <header className="flex items-center w-full px-4 py-3 bg-background gap-4 sticky top-0 z-10 border-b">
       <Link href="/" className="flex items-center">
         <Image
-          src="/images/Logo-01.png"
+          src="/images/Logo-01.png"   // ✅ Your Virgo logo
           alt="Virgo Logo"
           width={108}
           height={32}
@@ -18,6 +18,7 @@ export function SignedOutHeader() {
     </header>
   );
 }
+
 
 
   return (
