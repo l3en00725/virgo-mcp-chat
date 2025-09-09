@@ -16,7 +16,7 @@ import type { AdapterAccountType } from "next-auth/adapters"
 // Users
 //
 export const user = pgTable("User", {
-  id: text("id").primaryKey().notNull(), // switched from uuid
+  id: text("id").primaryKey().notNull(), // was uuid
   email: varchar("email", { length: 64 }).unique(),
   password: varchar("password", { length: 64 }),
 })
@@ -27,7 +27,7 @@ export type User = InferSelectModel<typeof user>
 // Chats
 //
 export const chat = pgTable("Chat", {
-  id: text("id").primaryKey().notNull().default("gen_random_uuid()"),
+  id: text("id").primaryKey().notNull(),
   createdAt: timestamp("createdAt").notNull(),
   title: text("title").notNull(),
   userId: text("userId")
@@ -41,7 +41,7 @@ export const chat = pgTable("Chat", {
 export type Chat = InferSelectModel<typeof chat>
 
 //
-// Accounts (for OAuth adapters, e.g. NextAuth, Pipedream)
+// Accounts
 //
 export const accounts = pgTable(
   "account",
@@ -73,7 +73,7 @@ export const accounts = pgTable(
 // Deprecated Messages
 //
 export const messageDeprecated = pgTable("Message", {
-  id: text("id").primaryKey().notNull().default("gen_random_uuid()"),
+  id: text("id").primaryKey().notNull(),
   chatId: text("chatId")
     .notNull()
     .references(() => chat.id),
@@ -88,7 +88,7 @@ export type MessageDeprecated = InferSelectModel<typeof messageDeprecated>
 // Messages v2
 //
 export const message = pgTable("Message_v2", {
-  id: text("id").primaryKey().notNull().default("gen_random_uuid()"),
+  id: text("id").primaryKey().notNull(),
   chatId: text("chatId")
     .notNull()
     .references(() => chat.id),
@@ -152,7 +152,7 @@ export type Vote = InferSelectModel<typeof vote>
 export const document = pgTable(
   "Document",
   {
-    id: text("id").notNull().default("gen_random_uuid()"),
+    id: text("id").notNull(),
     createdAt: timestamp("createdAt").notNull(),
     title: text("title").notNull(),
     content: text("content"),
@@ -178,7 +178,7 @@ export type Document = InferSelectModel<typeof document>
 export const suggestion = pgTable(
   "Suggestion",
   {
-    id: text("id").notNull().default("gen_random_uuid()"),
+    id: text("id").notNull(),
     documentId: text("documentId").notNull(),
     documentCreatedAt: timestamp("documentCreatedAt").notNull(),
     originalText: text("originalText").notNull(),
@@ -200,4 +200,3 @@ export const suggestion = pgTable(
 )
 
 export type Suggestion = InferSelectModel<typeof suggestion>
-
