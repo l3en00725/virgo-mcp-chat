@@ -2,20 +2,23 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { GitHubButton } from '@/components/github-button';
-import { SignInModal } from './sign-in-modal';
-import { useAuthContext } from './session-provider';
-import { DocsButton } from './docs-button';
 
 export function SignedOutHeader() {
-  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
-  const { isAuthDisabled } = useAuthContext();
+  return (
+    <header className="flex items-center w-full px-4 py-3 bg-background gap-4 sticky top-0 z-10 border-b">
+      <Link href="/" className="flex items-center">
+        <Image
+          src="/images/Logo-01.png"
+          alt="Virgo Logo"
+          width={108}
+          height={32}
+          priority
+        />
+      </Link>
+    </header>
+  );
+}
 
-  const handleGetStarted = () => {
-    setIsSignInModalOpen(true);
-  };
 
   return (
     <header className="flex items-center w-full px-4 py-3 bg-background gap-4 sticky top-0 z-10 border-b">
