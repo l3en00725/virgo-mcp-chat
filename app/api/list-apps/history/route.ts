@@ -1,20 +1,24 @@
 // app/api/history/route.ts
 import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@/app/(auth)/auth"
-import { db } from "@/lib/db/db"
-import { chat } from "@/lib/db/schema"
+import { auth } from "@app/(auth)/auth"
+import { db } from "@lib/db/db"
+import { chat } from "@lib/db/schema"
 import crypto from "crypto"
 
 export async function GET(req: NextRequest) {
   const session = await auth()
   const isAuthDisabled = process.env.DISABLE_AUTH === "true"
 
+  // ✅ Always use a proper UUID
   const userId = isAuthDisabled
-    ? crypto.randomUUID() // ✅ safe UUID instead of "local-dev-user"
+    ? crypto.randomUUID() // generate a random UUID
     : session?.user?.id
 
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    )
   }
 
   try {
@@ -32,3 +36,4 @@ export async function GET(req: NextRequest) {
     )
   }
 }
+
