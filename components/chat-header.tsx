@@ -1,7 +1,6 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useEffectiveSession } from '@/hooks/use-effective-session'
 import { ModelSelector } from "@/components/model-selector"
 import { SidebarToggle } from "@/components/sidebar-toggle"
 import { Button } from "@/components/ui/button"
@@ -24,12 +23,6 @@ function PureChatHeader({
 }) {
   const router = useRouter()
   const { open } = useSidebar()
-  const { data: session } = useEffectiveSession()
-  const isSignedIn = !!session?.user
-
-  if (!isSignedIn) {
-    return null
-  }
 
   return (
     <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-4 gap-4">
@@ -59,7 +52,7 @@ function PureChatHeader({
         <TooltipTrigger asChild>
           <Button
             variant="outline"
-            className={`md:px-2 md:h-fit ${open ? 'md:hidden' : 'md:flex'}`}
+            className={`md:px-2 md:h-fit ${open ? "md:hidden" : "md:flex"}`}
             onClick={() => {
               router.push("/")
               router.refresh()
@@ -81,4 +74,3 @@ export const ChatHeader = memo(
     return prevProps.selectedModelId === nextProps.selectedModelId
   }
 )
-
