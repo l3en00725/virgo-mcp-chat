@@ -3,7 +3,9 @@
 import { signIn, signOut, useSession } from "next-auth/react"
 
 export default function AuthButton() {
-  const { data: session, status } = useSession()
+  const sessionHook = useSession()
+  const session = sessionHook?.data
+  const status = sessionHook?.status
 
   if (status === "loading") {
     return <div className="text-sm text-gray-500">Loading...</div>
@@ -34,3 +36,4 @@ export default function AuthButton() {
     </button>
   )
 }
+
