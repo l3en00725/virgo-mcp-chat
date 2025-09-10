@@ -5,7 +5,9 @@ import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { BASE_METADATA } from "@/lib/constants"
 import DatadogInit from "@/components/datadog-init"
-import AuthButton from "@/app/(auth)/AuthButton";   // ✅ Import your auth button
+import AuthButton from "@/app/(auth)/AuthButton"   // ✅ Auth button
+import Image from "next/image"
+import Link from "next/link"
 
 import "./globals.css"
 
@@ -109,7 +111,18 @@ export default async function RootLayout({
         >
           {/* ✅ Top navigation bar */}
           <header className="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-            <h1 className="text-xl font-bold tracking-wide">VIRGO</h1>
+            {/* Logo (clickable) */}
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/images/Logo-01.png"
+                alt="Virgo Logo"
+                width={140}   // adjust as needed
+                height={40}
+                priority
+              />
+            </Link>
+
+            {/* Auth button */}
             <AuthButton />
           </header>
 
