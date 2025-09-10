@@ -4,7 +4,7 @@
   "private": true,
 "scripts": {
   "dev": "next dev",
-  "build": "drizzle-kit push && next build",
+  "build": "next build",
   "start": "next start",
   "lint": "next lint && biome lint --write --unsafe",
   "lint:fix": "next lint --fix && biome lint --write --unsafe",
@@ -16,7 +16,8 @@
   "db:pull": "drizzle-kit pull",
   "db:check": "drizzle-kit check",
   "db:up": "drizzle-kit up"
-},
+}
+
 
 
   "dependencies": {
