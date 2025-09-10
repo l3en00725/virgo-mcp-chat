@@ -111,20 +111,33 @@ export default async function RootLayout({
         >
           {/* ✅ Top navigation bar */}
           <header className="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-            {/* Logo (clickable) */}
-            <Link href="/" className="flex items-center">
-              <Image
-                src="/images/Logo-01.png"
-                alt="Virgo Logo"
-                width={140}   // adjust as needed
-                height={40}
-                priority
-              />
-            </Link>
+  {/* Left side: logo */}
+  <div className="flex items-center gap-6">
+    <img
+      src="/images/Logo-01.png"
+      alt="Virgo Logo"
+      className="h-8 w-auto"
+    />
 
-            {/* Auth button */}
-            <AuthButton />
-          </header>
+    {/* Add Claude Sonnet + Private dropdowns here */}
+    <div className="flex items-center gap-4">
+      {/* Replace these placeholders with your actual dropdown components */}
+      <select className="border rounded px-2 py-1 text-sm">
+        <option>Claude Sonnet 4</option>
+        <option>Claude 3.5</option>
+      </select>
+
+      <select className="border rounded px-2 py-1 text-sm">
+        <option>Private</option>
+        <option>Public</option>
+      </select>
+    </div>
+  </div>
+
+  {/* Right side: AuthButton */}
+  <AuthButton />
+</header>
+
 
           {/* Main content */}
           <main>{children}</main>
