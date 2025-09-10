@@ -1,44 +1,43 @@
-import type { InferSelectModel } from "drizzle-orm"
+import type { InferSelectModel } from "drizzle-orm";
 import {
   pgTable,
+  uuid,
   varchar,
   timestamp,
   json,
-  text,
   primaryKey,
   foreignKey,
   boolean,
   integer,
-} from "drizzle-orm/pg-core"
-import type { AdapterAccountType } from "next-auth/adapters"
+  text,
+} from "drizzle-orm/pg-core";
+import type { AdapterAccountType } from "next-auth/adapters";
 
 //
 // Users
 //
 export const user = pgTable("User", {
-  id: text("id").primaryKey().notNull(), // was uuid
+  id: uuid("id").defaultRandom().primaryKey(), // ✅ use uuid
   email: varchar("email", { length: 64 }).unique(),
   password: varchar("password", { length: 64 }),
-})
-
-export type User = InferSelectModel<typeof user>
+});
+export type User = InferSelectModel<typeof user>;
 
 //
 // Chats
 //
 export const chat = pgTable("Chat", {
-  id: text("id").primaryKey().notNull(),
+  id: uuid("id").defaultRandom().primaryKey(), // ✅ uuid
   createdAt: timestamp("createdAt").notNull(),
   title: text("title").notNull(),
-  userId: text("userId")
+  userId: uuid("userId")
     .notNull()
     .references(() => user.id),
   visibility: varchar("visibility", { enum: ["public", "private"] })
     .notNull()
     .default("private"),
-})
-
-export type Chat = InferSelectModel<typeof chat>
+});
+export type Chat = InferSelectModel<typeof chat>;
 
 //
 // Accounts
@@ -46,7 +45,7 @@ export type Chat = InferSelectModel<typeof chat>
 export const accounts = pgTable(
   "account",
   {
-    userId: text("userId")
+    userId: uuid("userId")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
     type: text("type").$type<AdapterAccountType>().notNull(),
@@ -67,61 +66,56 @@ export const accounts = pgTable(
       }),
     },
   ]
-)
+);
 
 //
-// Deprecated Messages
+// Messages v1 (deprecated)
 //
 export const messageDeprecated = pgTable("Message", {
-  id: text("id").primaryKey().notNull(),
-  chatId: text("chatId")
+  id: uuid("id").defaultRandom().primaryKey(),
+  chatId: uuid("chatId")
     .notNull()
     .references(() => chat.id),
   role: varchar("role").notNull(),
   content: json("content").notNull(),
   createdAt: timestamp("createdAt").notNull(),
-})
-
-export type MessageDeprecated = InferSelectModel<typeof messageDeprecated>
+});
+export type MessageDeprecated = InferSelectModel<typeof messageDeprecated>;
 
 //
 // Messages v2
 //
 export const message = pgTable("Message_v2", {
-  id: text("id").primaryKey().notNull(),
-  chatId: text("chatId")
+  id: uuid("id").defaultRandom().primaryKey(),
+  chatId: uuid("chatId")
     .notNull()
     .references(() => chat.id),
   role: varchar("role").notNull(),
   parts: json("parts").notNull(),
   attachments: json("attachments").notNull(),
   createdAt: timestamp("createdAt").notNull(),
-})
-
-export type DBMessage = InferSelectModel<typeof message>
+});
+export type DBMessage = InferSelectModel<typeof message>;
 
 //
-// Deprecated Votes
+// Votes (deprecated)
 //
 export const voteDeprecated = pgTable(
   "Vote",
   {
-    chatId: text("chatId")
+    chatId: uuid("chatId")
       .notNull()
       .references(() => chat.id),
-    messageId: text("messageId")
+    messageId: uuid("messageId")
       .notNull()
       .references(() => messageDeprecated.id),
     isUpvoted: boolean("isUpvoted").notNull(),
   },
-  (table) => {
-    return {
-      pk: primaryKey({ columns: [table.chatId, table.messageId] }),
-    }
-  }
-)
-
-export type VoteDeprecated = InferSelectModel<typeof voteDeprecated>
+  (table) => ({
+    pk: primaryKey({ columns: [table.chatId, table.messageId] }),
+  })
+);
+export type VoteDeprecated = InferSelectModel<typeof voteDeprecated>;
 
 //
 // Votes v2
@@ -129,22 +123,19 @@ export type VoteDeprecated = InferSelectModel<typeof voteDeprecated>
 export const vote = pgTable(
   "Vote_v2",
   {
-    chatId: text("chatId")
+    chatId: uuid("chatId")
       .notNull()
       .references(() => chat.id),
-    messageId: text("messageId")
+    messageId: uuid("messageId")
       .notNull()
       .references(() => message.id),
     isUpvoted: boolean("isUpvoted").notNull(),
   },
-  (table) => {
-    return {
-      pk: primaryKey({ columns: [table.chatId, table.messageId] }),
-    }
-  }
-)
-
-export type Vote = InferSelectModel<typeof vote>
+  (table) => ({
+    pk: primaryKey({ columns: [table.chatId, table.messageId] }),
+  })
+);
+export type Vote = InferSelectModel<typeof vote>;
 
 //
 // Documents
@@ -152,25 +143,22 @@ export type Vote = InferSelectModel<typeof vote>
 export const document = pgTable(
   "Document",
   {
-    id: text("id").notNull(),
+    id: uuid("id").defaultRandom().notNull(),
     createdAt: timestamp("createdAt").notNull(),
     title: text("title").notNull(),
     content: text("content"),
     kind: varchar("text", { enum: ["text", "code", "image", "sheet"] })
       .notNull()
       .default("text"),
-    userId: text("userId")
+    userId: uuid("userId")
       .notNull()
       .references(() => user.id),
   },
-  (table) => {
-    return {
-      pk: primaryKey({ columns: [table.id, table.createdAt] }),
-    }
-  }
-)
-
-export type Document = InferSelectModel<typeof document>
+  (table) => ({
+    pk: primaryKey({ columns: [table.id, table.createdAt] }),
+  })
+);
+export type Document = InferSelectModel<typeof document>;
 
 //
 // Suggestions
@@ -178,14 +166,14 @@ export type Document = InferSelectModel<typeof document>
 export const suggestion = pgTable(
   "Suggestion",
   {
-    id: text("id").notNull(),
-    documentId: text("documentId").notNull(),
+    id: uuid("id").defaultRandom().notNull(),
+    documentId: uuid("documentId").notNull(),
     documentCreatedAt: timestamp("documentCreatedAt").notNull(),
     originalText: text("originalText").notNull(),
     suggestedText: text("suggestedText").notNull(),
     description: text("description"),
     isResolved: boolean("isResolved").notNull().default(false),
-    userId: text("userId")
+    userId: uuid("userId")
       .notNull()
       .references(() => user.id),
     createdAt: timestamp("createdAt").notNull(),
@@ -197,6 +185,6 @@ export const suggestion = pgTable(
       foreignColumns: [document.id, document.createdAt],
     }),
   })
-)
+);
+export type Suggestion = InferSelectModel<typeof suggestion>;
 
-export type Suggestion = InferSelectModel<typeof suggestion>
