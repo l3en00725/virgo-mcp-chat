@@ -20,7 +20,7 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 
   return [ref, scrollToBottom];
 }
-import { useEffect, useRef, type RefObject } from 'react';
+
 
 export function useScrollToBottom<T extends HTMLElement>(): [
   RefObject<T>,
