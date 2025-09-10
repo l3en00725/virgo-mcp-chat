@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { BASE_METADATA } from "@/lib/constants"
 import DatadogInit from "@/components/datadog-init"
-import AuthButton from "@/app/(auth)/AuthButton"   // ✅ Import your auth button
+import AuthButton from "@/app/(auth)/AuthButton";   // ✅ Import your auth button
 
 import "./globals.css"
 
