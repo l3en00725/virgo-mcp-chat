@@ -1,3 +1,4 @@
+import { Messages } from "@/components/messages";
 export function Chat({
   id,
   initialMessages,
